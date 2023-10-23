@@ -95,8 +95,7 @@ def open_button_clicked(button):
     try:
         if dialog.run() == gtk.RESPONSE_ACCEPT:
             open_file = dialog.get_filename()
-            pixbuf = gtk.gdk.pixbuf_new_from_file(open_file)
-            if pixbuf:
+            if pixbuf := gtk.gdk.pixbuf_new_from_file(open_file):
                 zbar.scan_image(pixbuf)
     finally:
         dialog.destroy()
@@ -112,10 +111,7 @@ def set_status_label(opened, enabled):
     status_button.set_label(label)
 
 open_file = None
-video_device = None
-if len(sys.argv) > 1:
-    video_device = sys.argv[1]
-
+video_device = sys.argv[1] if len(sys.argv) > 1 else None
 # threads *must* be properly initialized to use zbarpygtk
 gtk.gdk.threads_init()
 gtk.gdk.threads_enter()

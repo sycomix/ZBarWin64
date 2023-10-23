@@ -37,7 +37,7 @@ if __name__ == "__main__":
             lookup(decode)
     if not sys.stdin.isatty():
         while 1:
-            decode = sys.stdin.readline()
-            if not decode:
+            if decode := sys.stdin.readline():
+                lookup(decode)
+            else:
                 break
-            lookup(decode)

@@ -13,10 +13,10 @@ project = u'ZBar iPhone SDK'
 copyright = u'2010-2012, Jeff Brown et al'
 
 today_fmt = '%Y-%m-%d'
-info = readPlist('../res/ZBarSDK-Info.plist')
-version = 'X.Y'
-if info:
+if info := readPlist('../res/ZBarSDK-Info.plist'):
     version = info['CFBundleVersion']
+else:
+    version = 'X.Y'
 release = version
 
 #add_module_names = False
@@ -47,7 +47,7 @@ html_theme_options = {
     'codetextcolor': 'black',
 }
 
-html_short_title = 'ZBarSDK ' + version
+html_short_title = f'ZBarSDK {version}'
 html_title = 'ZBar iPhone SDK Documentation'
 html_static_path = ['static']
 html_favicon = '../../zbar.ico'

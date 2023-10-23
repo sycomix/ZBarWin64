@@ -75,7 +75,7 @@ def distdir_search(subdir, base, suffixes=('',)):
         pass
 
     # poke around for subdir
-    subdirs = tuple((subdir, path.join('..', subdir), '..', ''))
+    subdirs = subdir, path.join('..', subdir), '..', ''
 
     for prefix in search:
         for subdir in subdirs:
@@ -207,8 +207,9 @@ def compare_maps(expect, actual, compare_func):
 
 def compare_sources(expect, actual):
     assert actual.tag == ET.QName(BC, 'source')
-    assert actual.get('href').endswith(expect.get('href')), \
-           'source href mismatch: %s != %s' % (acthref, exphref)
+    assert actual.get('href').endswith(
+        expect.get('href')
+    ), f'source href mismatch: {acthref} != {exphref}'
 
     # FIXME process/trim test:* contents
 
@@ -224,9 +225,9 @@ def compare_sources(expect, actual):
                 idx.set(str(ET.QName(TS, 'exception')), exc)
             return { '0': idx }
         elif len(src):
-            assert src[0].tag != ET.QName(BC, 'symbol'), \
-                   'invalid source element: ' + \
-                   'expecting "index" or "symbol", got "%s"' % fixtag(src[0])
+            assert src[0].tag != ET.QName(
+                BC, 'symbol'
+            ), f'invalid source element: expecting "index" or "symbol", got "{fixtag(src[0])}"'
 
         srcmap = { }
         for idx in src:
@@ -261,8 +262,7 @@ def compare_indices(expect, actual):
 
 
 def compare_symbols(expect, actual):
-    orient = expect.get('orientation')
-    if orient:
+    if orient := expect.get('orientation'):
         assert actual.get('orientation') == orient
 
 # override unittest.TestLoader to populate tests from xml description

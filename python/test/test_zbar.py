@@ -23,10 +23,7 @@ encoded_widths = \
 databar_widths = \
     '11 31111333 13911 31131231 11214222 11553 21231313 1'
 
-VIDEO_DEVICE = None
-if 'VIDEO_DEVICE' in os.environ:
-    VIDEO_DEVICE = os.environ['VIDEO_DEVICE']
-
+VIDEO_DEVICE = os.environ.get('VIDEO_DEVICE', None)
 is_identifier = re.compile(r'^[A-Z][A-Z_0-9]*$')
 
 class TestZBarFunctions(ut.TestCase):
@@ -201,8 +198,9 @@ class TestDecoder(ut.TestCase):
             else:
                 self.assert_(sym is zbar.Symbol.EAN13)
 
-        self.assertEqual(self.dcode.configs,
-                         set((zbar.Config.ENABLE, zbar.Config.EMIT_CHECK)))
+        self.assertEqual(
+            self.dcode.configs, {zbar.Config.ENABLE, zbar.Config.EMIT_CHECK}
+        )
         self.assertEqual(self.dcode.modifiers, set())
         self.assertEqual(self.dcode.data, '6268964977804')
         self.assert_(self.dcode.color is zbar.BAR)
@@ -221,9 +219,11 @@ class TestDecoder(ut.TestCase):
                              sym is zbar.Symbol.PARTIAL)
 
         self.assert_(sym is zbar.Symbol.DATABAR)
-        self.assertEqual(self.dcode.get_configs(zbar.Symbol.EAN13),
-                         set((zbar.Config.ENABLE, zbar.Config.EMIT_CHECK)))
-        self.assertEqual(self.dcode.modifiers, set((zbar.Modifier.GS1,)))
+        self.assertEqual(
+            self.dcode.get_configs(zbar.Symbol.EAN13),
+            {zbar.Config.ENABLE, zbar.Config.EMIT_CHECK},
+        )
+        self.assertEqual(self.dcode.modifiers, {zbar.Modifier.GS1})
         self.assertEqual(self.dcode.data, '0124012345678905')
         self.assert_(self.dcode.color is zbar.BAR)
         self.assertEqual(self.dcode.direction, 1)
@@ -363,8 +363,7 @@ class TestImageScan(ut.TestCase):
             self.assert_(isinstance(cfgs, set))
             for cfg in cfgs:
                 self.assert_(isinstance(cfg, zbar.EnumItem))
-            self.assertEqual(cfgs,
-                             set((zbar.Config.ENABLE, zbar.Config.EMIT_CHECK)))
+            self.assertEqual(cfgs, {zbar.Config.ENABLE, zbar.Config.EMIT_CHECK})
 
             mods = sym.modifiers
             self.assert_(isinstance(mods, set))
@@ -399,6 +398,7 @@ class TestImageScan(ut.TestCase):
 
         def set_symbols(syms):
             self.image.symbols = syms
+
         self.assertRaises(TypeError, set_symbols, ())
 
         self.scn.recycle(self.image)

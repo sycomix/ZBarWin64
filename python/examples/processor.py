@@ -8,10 +8,7 @@ proc = zbar.Processor()
 # configure the Processor
 proc.parse_config('enable')
 
-# initialize the Processor
-device = '/dev/video0'
-if len(argv) > 1:
-    device = argv[1]
+device = argv[1] if len(argv) > 1 else '/dev/video0'
 proc.init(device)
 
 # setup a callback
